@@ -1,4 +1,10 @@
-fn main() {
+use std::{fs::File, io::Read};
 
+fn main() {
     println!("Hello world!");
+
+    let mut input = String::new();
+    File::open("input.txt").unwrap().read_to_string(&mut input).unwrap();
+
+    println!("{:?}", input);
 }
