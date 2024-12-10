@@ -24,13 +24,11 @@ fn main() {
 
     fn get_answer_p1(vec1: &[i32], vec2: &[i32]) -> i32 {
 
-        let answer: i32 = vec1
+        vec1
             .iter()
             .zip(vec2.iter())
             .map(|(a, b)| (a - b).abs())
-            .sum();
-
-        answer
+            .sum()
     }
 
     fn get_answer_p2(vec1: &[i32], vec2: &[i32]) -> i32 {
