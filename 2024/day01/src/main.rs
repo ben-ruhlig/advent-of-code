@@ -2,7 +2,7 @@ use std::{fs, path::Path};
 
 fn main() {
 
-    fn part_one_get_answer(filepath: &Path) -> i32 {
+    fn get_sorted_vectors(filepath: &Path) -> (Vec<i32>, Vec<i32>) {
         // load input file to string
         let input = fs::read_to_string(filepath).expect("Error reading file");
 
@@ -16,11 +16,14 @@ fn main() {
                 _ => None,
             }).unzip();
 
-        // sort the vectors, least to greatest
+        // return sorted vectors
         vec1.sort();
         vec2.sort();
+        (vec1, vec2)
+    }
 
-        // determine the answer
+    fn get_answer_p1(vec1: &[i32], vec2: &[i32]) -> i32 {
+
         let answer: i32 = vec1
             .iter()
             .zip(vec2.iter())
@@ -30,11 +33,28 @@ fn main() {
         answer
     }
 
-     // filepath with cargo.toml (i.e. day01)
-    let project_root = env!("CARGO_MANIFEST_DIR");
-    // input data from 
-    let p1_input_path = Path::new(project_root).join("day01.txt"); 
-    let p1_answer = part_one_get_answer(&p1_input_path);
-    println!("Part 1 Answer: {}", p1_answer);
+    fn get_answer_p2(vec1: &[i32], vec2: &[i32]) -> i32 {
 
+        vec1[0];
+        vec2[0];
+
+        // let mut vec3: Vec<i32>;
+        for i in vec1 {
+            println!("{}", i);
+        }
+
+        12345
+    }
+
+    
+    // grab input filepath
+    let project_root = env!("CARGO_MANIFEST_DIR");
+    let input_path = Path::new(project_root).join("day01.txt"); 
+
+    // process and sort input vectors
+    let (vec1, vec2) = get_sorted_vectors(&input_path);
+
+    println!("Part 1 Answer: {}", get_answer_p1(&vec1, &vec2));
+    println!("Part 2 Answer: {}", get_answer_p2(&vec1, &vec2));
+        
 }
