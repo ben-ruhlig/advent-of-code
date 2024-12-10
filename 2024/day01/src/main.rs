@@ -36,12 +36,21 @@ fn main() {
         vec1[0];
         vec2[0];
 
+        let mut vec3: Vec<i32> = Vec::new();
+        let mut cnt = 0;
+
         // let mut vec3: Vec<i32>;
         for i in vec1 {
-            println!("{}", i);
+            for j in vec2 {
+                if i == j {
+                    cnt += 1;
+                }
+            vec3.push(cnt);
+            cnt = 0;
+            }
         }
 
-        12345
+        vec3.iter().sum()
     }
 
     
