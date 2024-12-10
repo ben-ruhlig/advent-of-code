@@ -30,7 +30,11 @@ fn main() {
         answer
     }
 
-    let p1_answer = part_one_get_answer(Path::new("input.txt"));
+     // filepath with cargo.toml (i.e. day01)
+    let project_root = env!("CARGO_MANIFEST_DIR");
+    // input data from 
+    let p1_input_path = Path::new(project_root).join("day01.txt"); 
+    let p1_answer = part_one_get_answer(&p1_input_path);
     println!("Part 1 Answer: {}", p1_answer);
 
 }
