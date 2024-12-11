@@ -2,7 +2,7 @@
 resolver = "2"
 
 members = [
-    "day01",
+    "day01", "day02",
     # add more days as needed
 ]
 

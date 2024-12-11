@@ -52,7 +52,6 @@ fn main() {
         vec3.iter().sum()
     }
 
-    
     // grab input filepath
     let project_root = env!("CARGO_MANIFEST_DIR");
     let input_path = Path::new(project_root).join("day01.txt"); 
