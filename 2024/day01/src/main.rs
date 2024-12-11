@@ -22,26 +22,23 @@ fn main() {
         (vec1, vec2)
     }
 
-    fn get_answer_p1(vec1: &[i32], vec2: &[i32]) -> i32 {
+    fn get_answer_p1(slice1: &[i32], slice2: &[i32]) -> i32 {
 
-        vec1
+        slice1
             .iter()
-            .zip(vec2.iter())
+            .zip(slice2.iter())
             .map(|(a, b)| (a - b).abs())
             .sum()
     }
 
-    fn get_answer_p2(vec1: &[i32], vec2: &[i32]) -> i32 {
-
-        vec1[0];
-        vec2[0];
+    fn get_answer_p2(slice1: &[i32], slice2: &[i32]) -> i32 {
 
         let mut vec3: Vec<i32> = Vec::new();
         let mut cnt = 0;
 
         // let mut vec3: Vec<i32>;
-        for i in vec1 {
-            for j in vec2 {
+        for i in slice1 {
+            for j in slice2 {
                 if i == j {
                     cnt += 1;
                 }
