@@ -45,11 +45,10 @@ fn main() {
                 if i == j {
                     cnt += 1;
                 }
-            vec3.push(cnt);
+            vec3.push(cnt * i);
             cnt = 0;
             }
         }
-
         vec3.iter().sum()
     }
 
