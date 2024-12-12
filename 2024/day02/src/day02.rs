@@ -41,7 +41,7 @@ pub fn get_answer_p2(filepath: &Path) -> i32 {
         .map(| report | {
             report.split_whitespace()
             .map( |score| {
-                score.parse::<i32>().expect("i32")
+                score.parse::<i32>().expect("Invalid number")
             }).collect()
         }).collect();
 
@@ -50,30 +50,29 @@ pub fn get_answer_p2(filepath: &Path) -> i32 {
     let safety_score: i32 = reports.iter().map(| report | {
 
         let mut last_diff: Option<i32> = None;
-        let mut idx: Option<usize> = None;
+        let mut idx = 0;
         let mut failed_idx: Option<usize> = None;
         let mut score: i32 = 1;
 
         // First loop to identify first failure (if exists)
         for window in report.windows(2) {
-            
-            // Update idx: If it's Some, increment it; otherwise, initialize to 0
-            idx = idx.map_or(Some(0), |curr_idx| Some(curr_idx + 1));
-
             let diff = window[1] - window[0];
+            
             // FAIL #1: incline/decline too steep
             if diff.abs() > 3 || diff.abs() < 1 {
-                failed_idx = idx;
+                failed_idx = Some(idx + 1);
                 break;
+            
             // FAIL #2: direction change
             } else if let Some(last) = last_diff {
                 if (last > 0 && diff < 0) || (last < 0 && diff > 0) {
-                    failed_idx = idx;
+                    failed_idx = Some(idx + 1);
                     break;
                 }
             }
             // update for next iteration
             last_diff = Some(diff);
+            idx += 1;
         }
 
         // Second loop only only if initial failure was identified
@@ -100,6 +99,8 @@ pub fn get_answer_p2(filepath: &Path) -> i32 {
                         break;
                     }
                 }
+                // update for next iteration
+                last_diff = Some(diff);
             }
         }
         score
