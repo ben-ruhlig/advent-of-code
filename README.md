@@ -8,3 +8,4 @@ all code for https://adventofcode.com/
 - Day02
     - [Part1](https://adventofcode.com/2024/day/2#part1): Iterate through contiguous slices of vector with method `windows`
     - [Part2](https://adventofcode.com/2024/day/2#part2): Dealing with `Option` types, and `enumerate` with vectors. Complex Logic. **Could this be done in a more rust friendly?**
+- Day03
