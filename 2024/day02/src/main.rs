@@ -11,8 +11,6 @@ fn main() {
     let input_path = Path::new(project_root).join("day02.txt");
     println!("    Part 1 Answer: {}", get_answer_p1(&input_path));
     println!("    Part 2 Answer: {}", get_answer_p2(&input_path));
-
-    get_answer_p1(&input_path);
 }
 
 #[cfg(test)]
