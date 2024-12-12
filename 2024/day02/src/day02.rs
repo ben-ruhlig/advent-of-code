@@ -58,12 +58,12 @@ pub fn get_answer_p2(filepath: &Path) -> i32 {
         for window in report.windows(2) {
             let diff = window[1] - window[0];
             
-            // FAIL #1: incline/decline too steep
+            // Fail case #1: Incline/decline too steep
             if diff.abs() > 3 || diff.abs() < 1 {
                 failed_idx = Some(idx + 1);
                 break;
             
-            // FAIL #2: direction change
+            // Fail case #2: Direction change
             } else if let Some(last) = last_diff {
                 if (last > 0 && diff < 0) || (last < 0 && diff > 0) {
                     failed_idx = Some(idx + 1);
@@ -75,32 +75,43 @@ pub fn get_answer_p2(filepath: &Path) -> i32 {
             idx += 1;
         }
 
-        // Second loop only only if initial failure was identified
-        if let Some(purge_idx) = failed_idx {
-            last_diff = None;
-            // create vector excluding failed level
-            let purged_vector: Vec<i32> = report.iter()
-                .enumerate()
-                .filter(| &(i, _)| i != purge_idx)
-                .map(|(_, &value)| value)
-                .collect();
+        // If no failure, the report must be safe.
+        if failed_idx.is_none() {
+            return score;
+        }
 
-            // loop through purged vector to find another failure
-            for window in purged_vector.windows(2) {
-                let diff = window[1] - window[0];
-                // FAIL #1: incline/decline too steep
-                if diff.abs() > 3 || diff.abs() < 1 {
-                    score = 0;
-                    break;
-                // FAIL #2: direction change
-                } else if let Some(last) = last_diff {
-                    if (last > 0 && diff < 0) || (last < 0 && diff > 0) {
-                        score = 0;
+        // Try purging each element to see if the report becomes safe
+        for purge_idx in 0..report.len() {
+            let mut last_diff: Option<i32> = None;
+            let mut is_safe = true;
+
+            for window in report.iter().enumerate()
+                .filter(|&(i, _)| i != purge_idx) // Skip the "purged" index
+                .map(|(_, &val)| val)
+                .collect::<Vec<_>>()
+                .windows(2)
+                {
+                    let diff = window[1] - window[0];
+                    // Fail case #1: Incline/decline too steep
+                    if diff.abs() > 3 || diff.abs() < 1 {
+                        is_safe = false;
                         break;
                     }
+                    // Fail case #2: Direction change
+                    if let Some(last) = last_diff {
+                        if (last > 0 && diff < 0) || (last < 0 && diff > 0) {
+                            is_safe = false;
+                            break;
+                        }
+                    }
+
+                    last_diff = Some(diff);
                 }
-                // update for next iteration
-                last_diff = Some(diff);
+            if is_safe {
+                score = 1;
+                break;
+            } else {
+                score = 0;
             }
         }
         score
