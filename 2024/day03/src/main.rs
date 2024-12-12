@@ -21,7 +21,7 @@ mod tests {
     fn part_one() {
         let project_root = env!("CARGO_MANIFEST_DIR");
         let input_path = Path::new(project_root).join("day03-test.txt");
-        assert_eq!(2, get_answer_p1(&input_path));
+        assert_eq!(161, get_answer_p1(&input_path));
     }
     #[test]
     fn part_two() {
