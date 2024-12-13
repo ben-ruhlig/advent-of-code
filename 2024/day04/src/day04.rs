@@ -6,16 +6,16 @@ pub fn get_answer_p1(filepath: &Path) -> i32 {
         row.chars().collect()
     }).collect();
 
-    let row_max: usize;
-    let col_max: usize;
+    let row_max: usize; // maximum index of outer Vec
+    let col_max: usize; // maximum index of inner Vec
 
     // Set row_max and col_max
     if !word_search.is_empty() {
-        row_max = word_search.len();
+        row_max = word_search.len() - 1;
         // println!("Total Vec:\n{:?}", inp);
         if word_search.get(0).is_some() {
             let col_vec = word_search.get(0).expect("Issue turning columns to vector.");
-            col_max = col_vec.len();
+            col_max = col_vec.len() - 1;
         } else {
             panic!("Issue parsing columns.")
         }
@@ -26,11 +26,14 @@ pub fn get_answer_p1(filepath: &Path) -> i32 {
     let mut words: i32 = 0;
 
     // iterate through word_search
-    for row in 0..row_max {
-        for col in 0..col_max {
+    for row in 0..(row_max+1) {
+        for col in 0..(col_max+1) {
             let letter: char = word_search[row][col];
             // If char is 'X', check for XMAS in all viable directions
             if letter == 'X' {
+                // println!("\nLetter X @ {}, {}", row, col);
+                // let start = words;
+
                 words += check_leftup(&word_search, row, col);
                 words += check_up(&word_search, row, col);
                 words += check_rightup(&word_search, row, col, col_max);
@@ -39,6 +42,8 @@ pub fn get_answer_p1(filepath: &Path) -> i32 {
                 words += check_rightdown(&word_search, row, col, row_max, col_max);
                 words += check_left(&word_search, row, col);
                 words += check_right(&word_search, row, col, col_max);
+
+                // println!("Total XMAS found: {}", words - start);
             }
         }
     }
@@ -61,8 +66,9 @@ fn check_leftup(word_search: &Vec<Vec<char>>, x_row: usize, x_col: usize) -> i32
         if 
             (word_search[x_row-1][x_col-1] == 'M') &&
             (word_search[x_row-2][x_col-2] == 'A') &&           
-            (word_search[x_row-3][x_col-3] == 'X')
+            (word_search[x_row-3][x_col-3] == 'S')
             {
+                // println!("Found leftup");
                 return 1; // found XMAS!
             }
     }
@@ -76,8 +82,9 @@ fn check_up(word_search: &Vec<Vec<char>>, x_row: usize, x_col: usize) -> i32 {
         if 
             (word_search[x_row-1][x_col] == 'M') &&
             (word_search[x_row-2][x_col] == 'A') &&           
-            (word_search[x_row-3][x_col] == 'X')
+            (word_search[x_row-3][x_col] == 'S')
             {
+                // println!("Found up");
                 return 1; // found XMAS!
             }
     }
@@ -91,8 +98,9 @@ fn check_rightup(word_search: &Vec<Vec<char>>, x_row: usize, x_col: usize, col_m
         if 
             (word_search[x_row-1][x_col+1] == 'M') &&
             (word_search[x_row-2][x_col+2] == 'A') &&           
-            (word_search[x_row-3][x_col+3] == 'X')
+            (word_search[x_row-3][x_col+3] == 'S')
             {
+                // println!("Found rightup");
                 return 1; // found XMAS!
             }
     }
@@ -106,8 +114,9 @@ fn check_leftdown(word_search: &Vec<Vec<char>>, x_row: usize, x_col: usize, row_
         if 
             (word_search[x_row+1][x_col-1] == 'M') &&
             (word_search[x_row+2][x_col-2] == 'A') &&           
-            (word_search[x_row+3][x_col-3] == 'X')
+            (word_search[x_row+3][x_col-3] == 'S')
             {
+                // println!("Found leftdown");
                 return 1; // found XMAS!
             }
     }
@@ -121,8 +130,9 @@ fn check_down(word_search: &Vec<Vec<char>>, x_row: usize, x_col: usize, row_max:
         if 
             (word_search[x_row+1][x_col] == 'M') &&
             (word_search[x_row+2][x_col] == 'A') &&           
-            (word_search[x_row+3][x_col] == 'X')
+            (word_search[x_row+3][x_col] == 'S')
             {
+                // println!("Found down");
                 return 1; // found XMAS!
             }
     }
@@ -131,33 +141,48 @@ fn check_down(word_search: &Vec<Vec<char>>, x_row: usize, x_col: usize, row_max:
 
 
 fn check_rightdown(word_search: &Vec<Vec<char>>, x_row: usize, x_col: usize, row_max: usize, col_max: usize) -> i32 {
-    // If XMAS would be in-bounds of word_search in this direction
-    if x_row as i32 + 3 <= row_max as i32 && x_col as i32 + 3 <= col_max as i32 {
-        if 
-            (word_search[x_row+1][x_col-1] == 'M') &&
-            (word_search[x_row+2][x_col-2] == 'A') &&           
-            (word_search[x_row+3][x_col-3] == 'X')
-            {
-                return 1; // found XMAS!
-            }
-    }
-    0 // default return 0, not found
+        // If XMAS would be in-bounds of word_search in this direction
+        if x_row as i32 + 3 <= row_max as i32 && x_col as i32 + 3 <= col_max as i32 {
+            if 
+                (word_search[x_row+1][x_col+1] == 'M') &&
+                (word_search[x_row+2][x_col+2] == 'A') &&           
+                (word_search[x_row+3][x_col+3] == 'S')
+                {
+                    // println!("Found rightdown");
+                    return 1; // found XMAS!
+                }
+        }
+        0 // default return 0, not found
 }
 
 
 fn check_left(word_search: &Vec<Vec<char>>, x_row: usize, x_col: usize) -> i32 {
-    //if x_row as i32 - 3 < 0 || x_col as i32 - 3 < 0 {
-    //    return 0;
-    //}
-
-    1
+    // If XMAS would be in-bounds of word_search in this direction
+    if x_col as i32 - 3 >= 0 {
+        if 
+            (word_search[x_row][x_col-1] == 'M') &&
+            (word_search[x_row][x_col-2] == 'A') &&           
+            (word_search[x_row][x_col-3] == 'S')
+            {
+                // println!("Found left");
+                return 1; // found XMAS!
+            }
+    }
+    0 // default return 0, not found
 }       
 
 
 fn check_right(word_search: &Vec<Vec<char>>, x_row: usize, x_col: usize, col_max: usize) -> i32 {
-    //if x_row as i32 - 3 < 0 || x_col as i32 - 3 < 0 {
-    //    return 0;
-    //}
-
-    1
+        // If XMAS would be in-bounds of word_search in this direction
+        if x_col as i32 + 3 <= col_max as i32 {
+            if 
+                (word_search[x_row][x_col+1] == 'M') &&
+                (word_search[x_row][x_col+2] == 'A') &&           
+                (word_search[x_row][x_col+3] == 'S')
+                {
+                    // println!("Found right");
+                    return 1; // found XMAS!
+                }
+        }
+        0 // default return 0, not found
 }
