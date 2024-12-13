@@ -10,4 +10,4 @@ all code for https://adventofcode.com/
     - [Part2](https://adventofcode.com/2024/day/2#part2): Dealing with `Option` types, and `enumerate` with vectors. Complex Logic. **Could this be done in a more rust friendly?**
 - Day03
     - [Part1](https://adventofcode.com/2024/day/3#part1): Using `regex`lib from crate to match groups in strings, then process.
-    - [Part2](https://adventofcode.com/2024/day/3#part2): 
+    - [Part2](https://adventofcode.com/2024/day/3#part2): NOT COMPLETE, COME BACK TO THIS

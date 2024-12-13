@@ -20,8 +20,8 @@ pub fn get_answer_p1(filepath: &Path) -> i32 {
 pub fn get_answer_p2(filepath: &Path) -> i32 {
     let input = fs::read_to_string(filepath).expect("Issue reading file to string");
     let re = Regex::new(r"mul\((\d+),(\d+)\)").unwrap();
-    let re_do = Regex::new(r"|do\(\)").unwrap();
-    let re_dont = Regex::new(r"don't\(\)").unwrap();
+    // let re_do = Regex::new(r"|do\(\)").unwrap();
+    // let re_dont = Regex::new(r"don't\(\)").unwrap();
 
     let mut enabled = true;
     let mut enabled_muls: Vec<(i32, i32)> = Vec::new();
