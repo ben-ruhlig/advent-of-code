@@ -1,6 +1,8 @@
 # advent-of-code
 all code for https://adventofcode.com/
 
+Good Rust Coder to Compare: https://github.com/AhmedYassineMaalej/AoC-2024/
+
 2024 Challenge - What did I learn each day:
 - Day01
     - [Part1](https://adventofcode.com/2024/day/1#part1): Sort & Compare two vectors with vector methods `iter`, `zip`, `map`
