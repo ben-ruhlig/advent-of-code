@@ -9,7 +9,7 @@ fn main() {
     // part 1
     {
         let start = Instant::now();
-        let solution = get_answer_p1("day05.txt");
+        let solution = get_answer_p1("day05-test.txt");
         let duration = start.elapsed();
         println!("    Part 1 Answer: {solution}\n        Duration: {duration:?}");
     }
