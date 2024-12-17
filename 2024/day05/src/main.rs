@@ -1,11 +1,15 @@
+#![deny(clippy::unwrap_used)]
+#![deny(clippy::expect_used)]
+#![deny(clippy::panic)]
+
 mod day05;
 
-use std::time::Instant;
 use day05::{get_answer_p1, get_answer_p2};
+use std::time::Instant;
 
 fn main() {
     println!("\n=====================Day05========================");
-    
+
     // part 1
     {
         let start = Instant::now();
@@ -13,7 +17,7 @@ fn main() {
         let duration = start.elapsed();
         println!("    Part 1 Answer: {solution}\n        Duration: {duration:?}");
     }
-    
+
     // part 2
     {
         let start = Instant::now();
