@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::{fs, path::Path};
 
 #[allow(unused)]
@@ -17,23 +18,26 @@ pub fn get_answer_p1(file: &str) -> i32 {
     let input_str = fs::read_to_string(filepath).expect("Failed to read file to string.");
 
     // Initialize empty Vec<Vec<usize>> for both graph and orderings
-    let mut graph: Vec<Vec<usize>> = Vec::new();
+    let mut graph: HashMap<usize, Vec<usize>> = HashMap::new();
     let mut orderings: Vec<Vec<usize>> = Vec::new();
 
     // for_each() better than map() b/c no transformation or new return value
     input_str.split("\n\n").for_each(|section| {
         // graph edge section
         if section.contains('|') {
-            let edges = section
-                .lines()
-                .map(|node_edge| {
-                    node_edge
-                        .split('|')
-                        .map(|node| node.parse::<usize>().expect("Failed node to usize."))
-                        .collect::<Vec<usize>>()
-                })
-                .collect::<Vec<Vec<usize>>>();
-            graph.extend(edges);
+            section.lines().for_each(|pair| {
+                let edge: Vec<usize> = pair
+                    .split('|')
+                    .map(|node| {
+                        node.parse::<usize>()
+                            .expect("Failed converting node to usize.")
+                    })
+                    .collect();
+                assert_eq!(2, edge.len(), "Each edge should specify exactly 2 nodes");
+                let origin_node = edge[0];
+                let destination_node = edge[1];
+                graph.entry(origin_node).or_default().push(destination_node);
+            });
         } else {
             // order section section
             let orders = section
