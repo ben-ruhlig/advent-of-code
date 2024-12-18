@@ -24,7 +24,7 @@ fn get_sorted_vectors(filepath: &path::Path) -> (Vec<i32>, Vec<i32>) {
 }
 
 pub fn get_answer_p1() -> i32 {
-    let filepath = path::Path("CARGO_MANIFEST_DIR").join("input/day01.txt");
+    let filepath = path::Path::new(env!("CARGO_MANIFEST_DIR")).join("input/day01.txt");
     let (vec1, vec2) = get_sorted_vectors(&filepath);
 
     vec1.iter()
@@ -34,7 +34,7 @@ pub fn get_answer_p1() -> i32 {
 }
 
 pub fn get_answer_p2() -> i32 {
-    let filepath = path::Path("CARGO_MANIFEST_DIR").join("input/day01.txt");
+    let filepath = path::Path::new(env!("CARGO_MANIFEST_DIR")).join("input/day01.txt");
     let (vec1, vec2) = get_sorted_vectors(&filepath);
 
     let mut vec3: Vec<i32> = Vec::new();
@@ -53,6 +53,6 @@ pub fn get_answer_p2() -> i32 {
 }
 
 fn main() {
-    get_answer_p1();
-    get_answer_p2();
+    println!("Day01 P1: {}", get_answer_p1());
+    println!("Day02 P2: {}", get_answer_p2());
 }

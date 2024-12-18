@@ -1,7 +1,7 @@
 use std::{fs, path};
 
 pub fn get_answer_p1() -> i32 {
-    let filepath = path::Path("CARGO_MANIFEST_DIR").join("input/day02.txt");
+    let filepath = path::Path::new(env!("CARGO_MANIFEST_DIR")).join("input/day02.txt");
     let input = fs::read_to_string(&filepath).expect("Issue reading file to string");
 
     let reports: Vec<Vec<i32>> = input
@@ -40,7 +40,7 @@ pub fn get_answer_p1() -> i32 {
 }
 
 pub fn get_answer_p2() -> i32 {
-    let filepath = path::Path("CARGO_MANIFEST_DIR").join("input/day02.txt");
+    let filepath = path::Path::new(env!("CARGO_MANIFEST_DIR")).join("input/day02.txt");
     let input = fs::read_to_string(&filepath).expect("Issue reading file to string");
 
     let reports: Vec<Vec<i32>> = input

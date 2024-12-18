@@ -1,7 +1,7 @@
 use std::{fs, path};
 
 pub fn get_answer_p1() -> i32 {
-    let filepath = path::Path("CARGO_MANIFEST_DIR").join("input/day04.txt");
+    let filepath = path::Path::new(env!("CARGO_MANIFEST_DIR")).join("input/day04.txt");
     let input = fs::read_to_string(&filepath).expect("Couldn't read to string");
     let word_search: Vec<Vec<char>> = input.lines().map(|row| row.chars().collect()).collect();
 
@@ -51,7 +51,7 @@ pub fn get_answer_p1() -> i32 {
 
 #[allow(unused)]
 pub fn get_answer_p2() -> i32 {
-    let filepath = path::Path("CARGO_MANIFEST_DIR").join("input/day04.txt");
+    let filepath = path::Path::new(env!("CARGO_MANIFEST_DIR")).join("input/day04.txt");
     1
 }
 

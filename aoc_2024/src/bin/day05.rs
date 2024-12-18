@@ -2,7 +2,7 @@ use std::{fs, path};
 
 #[allow(unused)]
 pub fn get_answer_p1() -> i32 {
-    let filepath = path::Path("CARGO_MANIFEST_DIR").join("input/day04.txt");
+    let filepath = path::Path::new(env!("CARGO_MANIFEST_DIR")).join("input/day04.txt");
     let input = fs::read_to_string(&filepath).expect("Failed to read file to string.");
 
     let (rules, orders) = input.split_once("\n\n").expect("Unexpected delimiter.");
@@ -13,7 +13,7 @@ pub fn get_answer_p1() -> i32 {
 
 #[allow(unused)]
 pub fn get_answer_p2() -> i32 {
-    let filepath = path::Path("CARGO_MANIFEST_DIR").join("input/day04.txt");
+    let filepath = path::Path::new(env!("CARGO_MANIFEST_DIR")).join("input/day04.txt");
     let input = fs::read_to_string(&filepath).expect("Failed to read file to string.");
     1
 }
