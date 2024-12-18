@@ -1,78 +1,17 @@
-use std::collections::HashMap;
 use std::{fs, path::Path};
 
 #[allow(unused)]
 pub fn get_answer_p1(file: &str) -> i32 {
-    let project_root = env!("CARGO_MANIFEST_DIR");
-    let filepath = Path::new(project_root).join(file);
+    let input = fs::read_to_string(Path::new(env!("CARGO_MANIFEST_DIR")).join(file))
+        .expect("Failed to read file to string.");
 
-    // data notes
-    // no integers greater than 99 (small size)
-
-    // iterate through string
-    // set flag to indicate when ordering rules end and orders begin (`\n\n` delimiter)
-    // order rules as DAG with Vec<Vec<uxize>> since 10-99 indices.
-    // orderings should be stored as vectors.
-
-    // order rules should be sorted topologically using DFS for efficient lookup.
-    let input_str = fs::read_to_string(filepath).expect("Failed to read file to string.");
-
-    // Initialize empty Vec<Vec<usize>> for both graph and orderings
-    let mut graph: HashMap<usize, Vec<usize>> = HashMap::new();
-    let mut orderings: Vec<Vec<usize>> = Vec::new();
-
-    // for_each() better than map() b/c no transformation or new return value
-    input_str.split("\n\n").for_each(|section| {
-        // graph edge section
-        if section.contains('|') {
-            section.lines().for_each(|pair| {
-                let edge: Vec<usize> = pair
-                    .split('|')
-                    .map(|node| {
-                        node.parse::<usize>()
-                            .expect("Failed converting node to usize.")
-                    })
-                    .collect();
-                assert_eq!(2, edge.len(), "Each edge should specify exactly 2 nodes");
-                let origin_node = edge[0];
-                let destination_node = edge[1];
-                graph.entry(origin_node).or_default().push(destination_node);
-            });
-        } else {
-            // order section section
-            let orders = section
-                .lines()
-                .map(|order| {
-                    order
-                        .split(',')
-                        .map(|node| {
-                            node.parse::<usize>()
-                                .expect("Failed to convert node to usize.")
-                        })
-                        .collect::<Vec<usize>>()
-                })
-                .collect::<Vec<Vec<usize>>>();
-            orderings.extend(orders);
-        }
-    });
-
-    // Example of printing the graph and orderings
-    println!("Graph:");
-    for edge in &graph {
-        println!("{:?}", edge);
-    }
-
-    println!("\nOrderings:");
-    for order in &orderings {
-        println!("{:?}", order);
-    }
+    let (rules, orders) = input.split_once("\n\n").expect("Unexpected delimiter.");
+    println!("Rules:\n{}\n\nOrders:\n{}", rules, orders);
 
     1
 }
 
 #[allow(unused)]
 pub fn get_answer_p2(file: &str) -> i32 {
-    let project_root = env!("CARGO_MANIFEST_DIR");
-    let input_path = Path::new(project_root).join(file);
-    2
+    1
 }
