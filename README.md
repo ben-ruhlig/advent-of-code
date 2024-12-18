@@ -16,3 +16,5 @@ Good Rust Coder to Compare: https://github.com/AhmedYassineMaalej/AoC-2024/
 - Day04
     - [Part1](https://adventofcode.com/2024/day/4#part1): Focus on control flow logic
     - [Part2](https://adventofcode.com/2024/day/4#part2): Not Complete. **Come back to this**
+- Day05:
+    - [Part1](https://adventofcode.com/2024/day/5#part1): Learn the brilliance of `include_str!` macro in std lib. Joys of `.split_once()` for a string.
