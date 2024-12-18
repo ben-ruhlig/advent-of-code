@@ -1,9 +1,8 @@
 use regex::Regex;
 use std::{fs, path};
 
-pub fn get_answer_p1() -> i32 {
-    let filepath = path::Path::new(env!("CARGO_MANIFEST_DIR")).join("input/day03.txt");
-    let input = fs::read_to_string(&filepath).expect("Issue reading file to string");
+pub fn get_answer_p1(filepath: &path::Path) -> i32 {
+    let input = fs::read_to_string(filepath).expect("Issue reading file to string");
     let re = Regex::new(r"mul\((\d{1,3}),(\d{1,3})\)").unwrap();
 
     let muls: Vec<(i32, i32)> = re
@@ -21,9 +20,8 @@ pub fn get_answer_p1() -> i32 {
     multiplied.iter().sum()
 }
 
-pub fn get_answer_p2() -> i32 {
-    let filepath = path::Path::new(env!("CARGO_MANIFEST_DIR")).join("input/day03.txt");
-    let input = fs::read_to_string(&filepath).expect("Issue reading file to string");
+pub fn get_answer_p2(filepath: &path::Path) -> i32 {
+    let input = fs::read_to_string(filepath).expect("Issue reading file to string");
     let re = Regex::new(r"mul\((\d+),(\d+)\)").unwrap();
     // let re_do = Regex::new(r"|do\(\)").unwrap();
     // let re_dont = Regex::new(r"don't\(\)").unwrap();
@@ -57,6 +55,23 @@ pub fn get_answer_p2() -> i32 {
 }
 
 fn main() {
-    get_answer_p1();
-    get_answer_p2();
+    let filepath = path::Path::new(env!("CARGO_MANIFEST_DIR")).join("input/day03.txt");
+    println!("Day03 P1: {}", get_answer_p1(&filepath));
+    // println!("Day03 P2: {}", get_answer_p2(&filepath));
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn day03_p1() {
+        let filepath = path::Path::new(env!("CARGO_MANIFEST_DIR")).join("input/day03_test.txt");
+        assert_eq!(161, get_answer_p1(&filepath));
+    }
+    // #[test]
+    // fn day03_p2() {
+    //     let filepath = path::Path::new(env!("CARGO_MANIFEST_DIR")).join("input/day03p2_test.txt");
+    //     assert_eq!(48, get_answer_p2(&filepath));
+    // }
 }

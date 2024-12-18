@@ -1,8 +1,7 @@
 use std::{fs, path};
 
-pub fn get_answer_p1() -> i32 {
-    let filepath = path::Path::new(env!("CARGO_MANIFEST_DIR")).join("input/day04.txt");
-    let input = fs::read_to_string(&filepath).expect("Couldn't read to string");
+pub fn get_answer_p1(filepath: &path::Path) -> i32 {
+    let input = fs::read_to_string(filepath).expect("Couldn't read to string");
     let word_search: Vec<Vec<char>> = input.lines().map(|row| row.chars().collect()).collect();
 
     let row_max: usize; // maximum index of outer Vec
@@ -50,8 +49,7 @@ pub fn get_answer_p1() -> i32 {
 }
 
 #[allow(unused)]
-pub fn get_answer_p2() -> i32 {
-    let filepath = path::Path::new(env!("CARGO_MANIFEST_DIR")).join("input/day04.txt");
+pub fn get_answer_p2(filepath: &path::Path) -> i32 {
     1
 }
 
@@ -165,6 +163,23 @@ fn check_right(word_search: &[Vec<char>], x_row: usize, x_col: usize, col_max: u
 }
 
 fn main() {
-    get_answer_p1();
-    get_answer_p2();
+    let filepath = path::Path::new(env!("CARGO_MANIFEST_DIR")).join("input/day04.txt");
+    println!("Day04 P1: {}", get_answer_p1(&filepath));
+    // println!("Day04 P2: {}", get_answer_p2());
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn day04_p1() {
+        let filepath = path::Path::new(env!("CARGO_MANIFEST_DIR")).join("input/day04_test.txt");
+        assert_eq!(18, get_answer_p1(&filepath));
+    }
+    // #[test]
+    // fn day04_p2() {
+    //     let filepath = path::Path::new(env!("CARGO_MANIFEST_DIR")).join("input/day04_test.txt");
+    //     assert_eq!(48, get_answer_p2(&filepath));
+    // }
 }

@@ -1,8 +1,7 @@
 use std::{fs, path};
 
-pub fn get_answer_p1() -> i32 {
-    let filepath = path::Path::new(env!("CARGO_MANIFEST_DIR")).join("input/day02.txt");
-    let input = fs::read_to_string(&filepath).expect("Issue reading file to string");
+pub fn get_answer_p1(filepath: &path::Path) -> i32 {
+    let input = fs::read_to_string(filepath).expect("Issue reading file to string");
 
     let reports: Vec<Vec<i32>> = input
         .lines()
@@ -39,9 +38,8 @@ pub fn get_answer_p1() -> i32 {
     safety_score
 }
 
-pub fn get_answer_p2() -> i32 {
-    let filepath = path::Path::new(env!("CARGO_MANIFEST_DIR")).join("input/day02.txt");
-    let input = fs::read_to_string(&filepath).expect("Issue reading file to string");
+pub fn get_answer_p2(filepath: &path::Path) -> i32 {
+    let input = fs::read_to_string(filepath).expect("Issue reading file to string");
 
     let reports: Vec<Vec<i32>> = input
         .lines()
@@ -129,6 +127,23 @@ pub fn get_answer_p2() -> i32 {
 }
 
 fn main() {
-    get_answer_p1();
-    get_answer_p2();
+    let filepath = path::Path::new(env!("CARGO_MANIFEST_DIR")).join("input/day02.txt");
+    println!("Day02 P1: {}", get_answer_p1(&filepath));
+    println!("Day02 P2: {}", get_answer_p2(&filepath));
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn day02_p1() {
+        let filepath = path::Path::new(env!("CARGO_MANIFEST_DIR")).join("input/day02_test.txt");
+        assert_eq!(2, get_answer_p1(&filepath));
+    }
+    #[test]
+    fn day02_p2() {
+        let filepath = path::Path::new(env!("CARGO_MANIFEST_DIR")).join("input/day02_test.txt");
+        assert_eq!(4, get_answer_p2(&filepath));
+    }
 }
