@@ -20,12 +20,17 @@ impl Direction {
     }
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 struct Position {
-    x: usize,
-    y: usize,
+    row: usize,
+    col: usize,
 }
 
+#[derive(Debug, Clone, Copy)]
+struct Boundary {
+    row: usize,
+    col: usize,
+}
 
 
 
