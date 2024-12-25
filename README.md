@@ -18,3 +18,5 @@ Good Rust Coder to Compare: https://github.com/AhmedYassineMaalej/AoC-2024/
     - [Part2](https://adventofcode.com/2024/day/4#part2): Not Complete. **Come back to this**
 - Day05:
     - [Part1](https://adventofcode.com/2024/day/5#part1): Learn the brilliance of `include_str!` macro in std lib. Joys of `.split_once()` for a string.
+- Day06:
+    - [Part1](https://adventofcode.com/2024/day/6#part1): Should have used [`check-sub()`](https://doc.rust-lang.org/std/primitive.usize.html#method.checked_sub) method on primitive types to check for overflow when using the usize grid rather than do a manual check. 
