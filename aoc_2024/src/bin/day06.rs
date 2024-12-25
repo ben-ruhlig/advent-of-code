@@ -249,6 +249,6 @@ mod tests {
     #[test]
     fn day06_p2() {
         let filepath = path::Path::new(env!("CARGO_MANIFEST_DIR")).join("input/day06_test.txt");
-        assert_eq!(2, get_answer_p2(&filepath));
+        assert_eq!(6, get_answer_p2(&filepath));
     }
 }
