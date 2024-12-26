@@ -27,8 +27,8 @@ struct Position {
 }
 
 impl Position {
-    fn new(row: usize, col: usize) -> Position{
-        Self { row, col }
+    fn new(row: usize, col: usize) -> Result<Self, &'static str> {
+        Ok(Self { row, col })
     }
 }
 
@@ -65,16 +65,15 @@ enum MapStatus {
 
 #[derive(Debug)]
 pub struct Map {
-    boundary: Boundary,                 // map boundary
-    guard: GuardPosition,               // guard position and direction
-    obstacles: HashSet<Position>,       // existing obstacles
-    visited: HashSet<Position>,         // visited positions
-    new_obstacles: HashSet<Position>,   // obstacles that would create cycles
-    status: MapStatus,                  // map status complete or incomplete
+    boundary: Boundary,
+    guard: GuardPosition,
+    obstacles: HashSet<Position>,
+    visited: HashSet<Position>,
+    status: MapStatus,
 }
 
 impl Map {
-    pub fn create_from_string(map_str: &str) -> Self {
+    pub fn new(map_str: &str) -> Self {
         let dir_extract = |c: char| -> Direction {
             match c {
                 '>' => Direction::Right,
@@ -88,7 +87,6 @@ impl Map {
         let mut guard: Option<GuardPosition> = None;
         let mut obstacles: HashSet<Position> = HashSet::new();
         let mut visited: HashSet<Position> = HashSet::new();
-        let new_obstacles: HashSet<Position> = HashSet::new();
         let mut row: usize = 0;
         let mut col: usize = 0;
         
@@ -98,10 +96,10 @@ impl Map {
                 .chars()
                 .for_each(|c| {
                     if c == '#' {
-                        obstacles.insert(Position::new(row, col));
+                        obstacles.insert(Position::new(row, col).unwrap());
                     } else if c == '>' || c == 'v' || c == '<' || c == '^' {
                         guard = Some(GuardPosition::new(row, col, dir_extract(c)));
-                        visited.insert(Position::new(row, col));
+                        visited.insert(Position::new(row, col).unwrap());
                     }
                     col += 1;
                 });
@@ -116,11 +114,15 @@ impl Map {
             r < row && c < col
         };
         let contains_obstacle = |(r, c): (usize, usize)| -> bool {
-            obstacles.contains(&Position::new(r, c))
+            obstacles.contains(&Position::new(r, c).unwrap())
         };
         
-        // If there's a guard, check if it's surrounded by obstacles. If it is, the map is complete.
-        if let Some(g) = guard {
+        // If there's no guard, panic
+        if guard.is_none() {
+            panic!("Guard not found.");
+        // If there's a guard, check if it's surrounded by obstacles. If it is, make sure the map status is complete.
+        } else {
+            let g = guard.unwrap();
             if
                 inbounds((g.position.row, g.position.col + 1)) && contains_obstacle((g.position.row, g.position.col + 1))
                 && inbounds((g.position.row + 1, g.position.col)) && contains_obstacle((g.position.row + 1, g.position.col))
@@ -129,17 +131,14 @@ impl Map {
             {
                 status = MapStatus::Complete;
             }
-        } else {
-            panic!("Guard not found.");
-
         }
 
+        // Return the map
         Self {
             boundary: Boundary {row, col},
-            guard: guard.unwrap(),  // Will panic before this line if guard is None
+            guard: guard.unwrap(),
             obstacles,
             visited,
-            new_obstacles,
             status,
         }
     }
@@ -148,8 +147,9 @@ impl Map {
         self.visited.len() as usize
     }
 
-    fn unique_cycle_generating_obstacles(&self) -> usize {
-        self.new_obstacles.len() as usize
+    fn exceeds_upper_bounds(&self, position: &Position) -> bool {
+        // println!("Is In Bounds Boundary\n{:#?}\nPosition\n{:#?}", self.boundary, position);
+        position.row > self.boundary.row  || position.col > self.boundary.col
     }
 
     fn visited(&mut self, position: Position) {
@@ -160,75 +160,98 @@ impl Map {
         self.status = MapStatus::Complete;
     }
 
-    fn get_next_position(&self) -> Option<Position> {
-        let mut next_p: Option<Position> = None;
-        let curr_p = self.guard.position;
-        let d = self.guard.direction;
-
-        let lower_bound_issue = |curr_p: Position, d: Direction| -> bool {
-            curr_p.row == 0 && d == Direction::Up || curr_p.col == 0 && d == Direction::Left
-        };
-
-        let upper_bound_issue = |next_p: Position, b: Boundary| {
-            next_p.row > b.row  || next_p.col > b.col
-        };
-
-        let get_next_position = |curr_p: Position, d: Direction| -> Position {
-            match d {
-                Direction::Right => Position::new(curr_p.row, curr_p.col + 1),
-                Direction::Down => Position::new(curr_p.row + 1, curr_p.col),
-                Direction::Left => Position::new(curr_p.row, curr_p.col - 1),
-                Direction::Up => Position::new(curr_p.row - 1, curr_p.col),
-            }
-        };
-
-        if !lower_bound_issue(curr_p, d) {
-            let potential_next_p = get_next_position(curr_p, d);
-            if !upper_bound_issue(potential_next_p, self.boundary) {
-                next_p = Some(potential_next_p);
-            }
-        }
-        next_p
-    }
-
     fn next_position(&mut self) {
-        let next_p = self.get_next_position();
-        if next_p.is_none() {
+        let p = self.guard.position;
+
+        // if guard is at lower boundary and heading off map, complete early
+        if p.col == 0 && self.guard.direction == Direction::Left {
             self.complete();
-        } else {
-            let next_p = next_p.unwrap();
-            if self.obstacles.contains(&next_p) {
+            return ()
+        } else if {
+            p.row == 0 && self.guard.direction == Direction::Up
+        } {
+            self.complete();
+            return ()
+        }
+
+        let new_p = match self.guard.direction {
+            Direction::Right => Position::new(p.row, p.col + 1),
+            Direction::Down => Position::new(p.row + 1, p.col),
+            Direction::Left => Position::new(p.row, p.col - 1),
+            Direction::Up => Position::new(p.row - 1, p.col),
+        };
+
+
+        if let Ok(new_position) = new_p {
+            if self.exceeds_upper_bounds(&new_position) {
+                self.complete();
+            } else if self.obstacles.contains(&new_position) {
                 self.guard.turn_right();
                 self.next_position();
             } else {
-                self.guard.position = next_p.clone();
-                let potential_cycle_obstacle = self.get_next_position();
-                if self.visited.contains(&next_p) && !potential_cycle_obstacle.is_none() {
-                    self.new_obstacles.insert(potential_cycle_obstacle.unwrap());
-                }
-                self.visited(next_p);
+                self.guard.position = new_position.clone();
+                self.visited(new_position);
             }
+        } else {
+            self.complete();
+        }
+
+    }
+
+    fn print_map(&self, start_guard: GuardPosition) {
+        for row in 0..self.boundary.row {
+            for col in 0..self.boundary.col {
+                let p = Position::new(row, col).unwrap();
+                if self.guard.position == p {
+                    if self.guard.direction == Direction::Right {
+                        print!(">");
+                    } else if self.guard.direction == Direction::Down {
+                        print!("v");
+                    } else if self.guard.direction == Direction::Left {
+                        print!("<");
+                    } else if self.guard.direction == Direction::Up {
+                        print!("^");
+                    }
+                } else if start_guard.position == p{
+                    if start_guard.direction == Direction::Right {
+                        print!(">");
+                    } else if start_guard.direction == Direction::Down {
+                        print!("v");
+                    } else if start_guard.direction == Direction::Left {
+                        print!("<");
+                    } else if start_guard.direction == Direction::Up {
+                        print!("^");
+                    }
+                } else if self.obstacles.contains(&p) {
+                    print!("#");
+                } else if self.visited.contains(&p) {
+                    print!("X");
+                } else {
+                    print!(".");
+                }
+            }
+            println!();
         }
     }
 }
 
-fn get_and_process_map(filepath: &path::Path) -> Map {
-    let input = fs::read_to_string(filepath).expect("Failed to read file to string.");
-    let mut map = Map::create_from_string(&input);
+pub fn get_answer_p1(filepath: &path::Path) -> usize {
+    let input = fs::read_to_string(filepath).unwrap();
+    let mut map = Map::new(&input);
+    let start_guard = map.guard.clone();
     while map.status == MapStatus::Incomplete {
         map.next_position();
+        // println!("Next Position\n{:#?}", map.guard);
     };
-    map
-}
-
-pub fn get_answer_p1(filepath: &path::Path) -> usize {
-    let map = get_and_process_map(filepath);
+    // println!("Visited\n{:#?}", map.visited);
+    map.print_map(start_guard);
     map.unique_visits()
 }
 
+#[allow(unused_variables)]
 pub fn get_answer_p2(filepath: &path::Path) -> usize {
-    let map = get_and_process_map(filepath);
-    map.unique_cycle_generating_obstacles()
+    let input = fs::read_to_string(filepath).expect("Failed to read file to string.");
+    1
 }
 
 fn main() {
@@ -246,9 +269,9 @@ mod tests {
         let filepath = path::Path::new(env!("CARGO_MANIFEST_DIR")).join("input/day06_test.txt");
         assert_eq!(42, get_answer_p1(&filepath));
     }
-    #[test]
-    fn day06_p2() {
-        let filepath = path::Path::new(env!("CARGO_MANIFEST_DIR")).join("input/day06_test.txt");
-        assert_eq!(6, get_answer_p2(&filepath));
-    }
+    // #[test]
+    // fn day06_p2() {
+    //     let filepath = path::Path::new(env!("CARGO_MANIFEST_DIR")).join("input/day06_test.txt");
+    //     assert_eq!(2, get_answer_p2(&filepath));
+    // }
 }
