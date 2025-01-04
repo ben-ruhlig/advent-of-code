@@ -1,5 +1,5 @@
 use std::collections::HashSet;
-use std::{fs, path};
+use std::fs;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum Direction {
@@ -146,7 +146,6 @@ impl Map {
     }
 
     fn exceeds_upper_bounds(&self, position: &Position) -> bool {
-        // println!("Is In Bounds Boundary\n{:#?}\nPosition\n{:#?}", self.boundary, position);
         position.row > self.boundary.row || position.col > self.boundary.col
     }
 
@@ -165,7 +164,7 @@ impl Map {
         if p.col == 0 && self.guard.direction == Direction::Left {
             self.complete();
             return ();
-        } else if { p.row == 0 && self.guard.direction == Direction::Up } {
+        } else if p.row == 0 && self.guard.direction == Direction::Up {
             self.complete();
             return ();
         }
@@ -191,80 +190,13 @@ impl Map {
             self.complete();
         }
     }
-
-    fn print_map(&self, start_guard: GuardPosition) {
-        for row in 0..self.boundary.row {
-            for col in 0..self.boundary.col {
-                let p = Position::new(row, col).unwrap();
-                if self.guard.position == p {
-                    if self.guard.direction == Direction::Right {
-                        print!(">");
-                    } else if self.guard.direction == Direction::Down {
-                        print!("v");
-                    } else if self.guard.direction == Direction::Left {
-                        print!("<");
-                    } else if self.guard.direction == Direction::Up {
-                        print!("^");
-                    }
-                } else if start_guard.position == p {
-                    if start_guard.direction == Direction::Right {
-                        print!(">");
-                    } else if start_guard.direction == Direction::Down {
-                        print!("v");
-                    } else if start_guard.direction == Direction::Left {
-                        print!("<");
-                    } else if start_guard.direction == Direction::Up {
-                        print!("^");
-                    }
-                } else if self.obstacles.contains(&p) {
-                    print!("#");
-                } else if self.visited.contains(&p) {
-                    print!("X");
-                } else {
-                    print!(".");
-                }
-            }
-            println!();
-        }
-    }
 }
 
-pub fn get_answer_p1(filepath: &path::Path) -> usize {
-    let input = fs::read_to_string(filepath).unwrap();
+pub fn solution(file_path: &str) -> usize {
+    let input = fs::read_to_string(file_path).unwrap();
     let mut map = Map::new(&input);
     while map.status == MapStatus::Incomplete {
         map.next_position();
-        // println!("Next Position\n{:#?}", map.guard);
     }
-    // println!("Visited\n{:#?}", map.visited);
-    // map.print_map(start_guard);
     map.unique_visits()
-}
-
-#[allow(unused_variables)]
-pub fn get_answer_p2(filepath: &path::Path) -> usize {
-    let input = fs::read_to_string(filepath).expect("Failed to read file to string.");
-    1
-}
-
-fn main() {
-    let filepath = path::Path::new(env!("CARGO_MANIFEST_DIR")).join("input/day06.txt");
-    println!("Day06 P1: {}", get_answer_p1(&filepath));
-    // println!("Day06 P2: {}", get_answer_p2(&filepath));
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn day06_p1() {
-        let filepath = path::Path::new(env!("CARGO_MANIFEST_DIR")).join("input/day06_test.txt");
-        assert_eq!(42, get_answer_p1(&filepath));
-    }
-    // #[test]
-    // fn day06_p2() {
-    //     let filepath = path::Path::new(env!("CARGO_MANIFEST_DIR")).join("input/day06_test.txt");
-    //     assert_eq!(2, get_answer_p2(&filepath));
-    // }
 }
