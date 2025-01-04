@@ -1,6 +1,11 @@
 # advent-of-code
 all code for https://adventofcode.com/
 
+Enter 2024 folder:
+```
+cd aoc_2024
+```
+
 Run solutions:
 ```
 cargo run                      // Run all implemented solutions
