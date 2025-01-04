@@ -1,21 +1,25 @@
 # advent-of-code
 all code for https://adventofcode.com/
 
-To run specific problems (can list multiple):
+Run solutions:
 ```
-cargo run day1p1 day1p2
+cargo run                      // Run all implemented solutions
+cargo run -- --day 1           // Run both parts of day 1
+cargo run -- --day 1 --part 1  // Run day 1, part 1
 ```
 
-To run tests:
+Run tests:
 ```
 cargo test --lib               // all tests
 cargo test --lib day1          // all day 1 tests
 cargo test --lib day1p1        // day 1 part 1 tests
 ```
 
-To run benchmarks:
+Run benchmarks:
 ```
-cargo bench -- day1p1          // run single benchmark
-cargo bench -- day1            // run all day1 benchmarks
 cargo bench                    // run all benchmarks
+cargo bench -- day1            // run all day 1 benchmarks
+cargo bench -- day1p1          // run single benchmark for day 1 part 1
 ```
+
+

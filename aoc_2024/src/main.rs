@@ -1,39 +1,45 @@
 mod problems;
+use clap::Parser;
+
+#[derive(Parser)]
+#[command(name = "aoc2024")]
+#[command(about = "Advent of Code 2024 Solutions")]
+struct Cli {
+    /// Day number to run (1-25)
+    #[arg(short, long)]
+    day: Option<u8>,
+
+    /// Part number to run (1-2)
+    #[arg(short, long)]
+    part: Option<u8>,
+}
 
 fn main() {
+    let cli = Cli::parse();
     let mut selected_files: Vec<(u8, u8)> = vec![];
 
-    let args = std::env::args().collect::<Vec<String>>();
-    if args.len() > 1 {
-        args.iter().skip(1).for_each(|arg| {
-            let chars = arg.chars().collect::<Vec<char>>();
-            assert!(chars[0] == 'd');
-            assert!(chars[1] == 'a');
-            assert!(chars[2] == 'y');
-            assert!(chars[4] == 'p');
-
-            let day = chars[3]
-                .to_string()
-                .parse::<u8>()
-                .expect("Invalid day. Should be a number");
-            let part = chars[5]
-                .to_string()
-                .parse::<u8>()
-                .expect("Invalid part. Should be a number");
-
+    match (cli.day, cli.part) {
+        (Some(day), Some(part)) => {
             selected_files.push((day, part));
-        })
-    } else {
-        selected_files.extend([
-            (1, 1),
-            (1, 2),
-            (2, 1),
-            (2, 2),
-            (3, 1),
-            (4, 1),
-            (5, 1),
-            (6, 1),
-        ]);
+        }
+        (Some(day), None) => {
+            // If only day is specified, run both parts
+            selected_files.push((day, 1));
+            selected_files.push((day, 2));
+        }
+        (None, _) => {
+            // Default behavior - run all implemented solutions
+            selected_files.extend([
+                (1, 1),
+                (1, 2),
+                (2, 1),
+                (2, 2),
+                (3, 1),
+                (4, 1),
+                (5, 1),
+                (6, 1),
+            ]);
+        }
     }
 
     fn run_day(day: &u8, part: &u8) {
