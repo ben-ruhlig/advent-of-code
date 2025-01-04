@@ -1,8 +1,6 @@
-use std::{
-    cmp::Ordering, collections::HashSet, fs, path
-};
+use std::{cmp::Ordering, collections::HashSet, fs, path};
 
-pub fn get_answer_p1(filepath: &path::Path) -> usize{
+pub fn get_answer_p1(filepath: &path::Path) -> usize {
     let input = fs::read_to_string(filepath).unwrap();
 
     let (orderings, updates) = input.split_once("\n\n").unwrap();
@@ -29,7 +27,7 @@ pub fn get_answer_p1(filepath: &path::Path) -> usize{
 pub fn get_answer_p2(filepath: &path::Path) -> usize {
     let input = fs::read_to_string(filepath).expect("Failed to read file to string.");
     let (orderings, updates) = input.split_once("\n\n").unwrap();
-        let orderings: HashSet<(usize, usize)> = orderings
+    let orderings: HashSet<(usize, usize)> = orderings
         .lines()
         .map(|line| (line[0..2].parse().unwrap(), line[3..].parse().unwrap()))
         .collect();
@@ -40,9 +38,7 @@ pub fn get_answer_p2(filepath: &path::Path) -> usize {
         let (x, y) = (*x, *y);
         if orderings.contains(&(x, y)) {
             Ordering::Less
-        } else if {
-            orderings.contains(&(y, x))
-        } {
+        } else if { orderings.contains(&(y, x)) } {
             Ordering::Greater
         } else {
             Ordering::Equal
