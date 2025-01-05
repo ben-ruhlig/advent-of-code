@@ -38,6 +38,7 @@ fn main() {
                 (4, 1),
                 (5, 1),
                 (6, 1),
+                (7, 1),
             ]);
         }
     }
@@ -57,7 +58,7 @@ fn main() {
             (5u8, 2u8) => println!("Day5 P2: {}", problems::day5p2::solution(&input_path)),
             (6u8, 1u8) => println!("Day6 P1: {}", problems::day6p1::solution(&input_path)),
             // (6u8, 2u8) => println!("Day6 P2: {}", problems::day6p2::solution(&input_path)),
-            // (7u8, 1u8) => println!("Day7 P1: {}", problems::day7p1::solution(&input_path)),
+            (7u8, 1u8) => println!("Day7 P1: {}", problems::day7p1::solution(&input_path)),
             // (7u8, 2u8) => println!("Day7 P2: {}", problems::day7p2::solution(&input_path)),
             // (8u8, 1u8) => println!("Day8 P1: {}", problems::day8p1::solution(&input_path)),
             // (8u8, 2u8) => println!("Day8 P2: {}", problems::day8p2::solution(&input_path)),

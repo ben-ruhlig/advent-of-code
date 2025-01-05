@@ -35,6 +35,9 @@ fn criterion_benchmark(c: &mut Criterion) {
     c.bench_function("day6p1", |b| {
         b.iter(|| day6p1::solution(black_box("./input/day6.txt")))
     });
+    c.bench_function("day7p1", |b| {
+        b.iter(|| day7p1::solution(black_box("./input/day7.txt")))
+    });
 }
 
 criterion_group!(benches, criterion_benchmark);
