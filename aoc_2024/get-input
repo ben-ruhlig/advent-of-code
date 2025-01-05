@@ -1,0 +1,8 @@
+#!/bin/bash
+
+source .env
+
+day=$1
+echo "Downloading input for day ${day}"
+echo "session=${COOKIE}"
+curl -b "session=${COOKIE}" https://adventofcode.com/2024/day/${day}/input > ./input/day_${day}.txt

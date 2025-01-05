@@ -27,4 +27,7 @@ cargo bench -- day1            // run all day 1 benchmarks
 cargo bench -- day1p1          // run single benchmark for day 1 part 1
 ```
 
-
+Download input (bash):
+```
+./get-input 7
+```
