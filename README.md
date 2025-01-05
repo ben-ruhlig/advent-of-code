@@ -20,12 +20,14 @@ cargo test --lib day1          // all day 1 tests
 cargo test --lib day1p1        // day 1 part 1 tests
 ```
 
-Run benchmarks:
+Run benchmarks with criterion:
 ```
 cargo bench                    // run all benchmarks
 cargo bench -- day1            // run all day 1 benchmarks
 cargo bench -- day1p1          // run single benchmark for day 1 part 1
 ```
+
+Note, criterion depends on [gnuplot](http://www.gnuplot.info/) to generate plots, so you may need to install it.
 
 Download input (bash):
 ```
