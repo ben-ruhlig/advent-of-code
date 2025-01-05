@@ -20,6 +20,14 @@ fn find_target(target: &u64, nums: &[u64]) -> bool {
                 return true;
             }
         }
+        // concatenation case
+        let next_str = curr.to_string() + &nums[index].to_string();
+        let next = next_str.parse::<u64>().ok();
+        if let Some(next) = next {
+            if next <= *target && recurse(index + 1, next, target, nums) {
+                return true;
+            }
+        }
         false
     }
     if nums.is_empty() {
