@@ -9,8 +9,8 @@ cd aoc_2024
 Run solutions:
 ```
 cargo run                      // Run all implemented solutions
-cargo run -- --day 1           // Run both parts of day 1
-cargo run -- --day 1 --part 1  // Run day 1, part 1
+cargo run -- -d 1           // Run both parts of day 1
+cargo run -- -d 1 -p 1  // Run day 1, part 1
 ```
 
 Run tests:
