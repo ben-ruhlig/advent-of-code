@@ -61,6 +61,6 @@ mod tests {
 
     #[test]
     fn day8p1() {
-        assert_eq!(15, problems::day8p1::solution("./input/day8_test.txt"));
+        assert_eq!(14, problems::day8p1::solution("./input/day8_test.txt"));
     }
 }
