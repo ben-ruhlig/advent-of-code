@@ -58,4 +58,9 @@ mod tests {
     fn day7p2() {
         assert_eq!(11387, problems::day7p2::solution("./input/day7_test.txt"));
     }
+
+    #[test]
+    fn day8p1() {
+        assert_eq!(15, problems::day8p1::solution("./input/day8_test.txt"));
+    }
 }
